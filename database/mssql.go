@@ -1,11 +1,12 @@
-gopackage database
+package database
 
 import (
 	"fmt"
-	"go.uber.org/zap"
 	"os"
 	"strconv"
 	"time"
+
+	"go.uber.org/zap"
 
 	"github.com/kartmatias/cdwk-pos-agent/dao/model"
 	"gorm.io/driver/sqlserver"
