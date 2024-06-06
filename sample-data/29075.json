@@ -1,0 +1,366 @@
+{
+  "id": 29075,
+  "name": "TANGA AMELI",
+  "slug": "tanga-ameli",
+  "permalink": "https:\/\/ninaflorlingerie.com.br\/produto\/tanga-ameli\/",
+  "date_created": "2023-03-29T16:20:17",
+  "date_created_gmt": "2023-03-29T19:20:17",
+  "date_modified": "2023-04-12T14:26:36",
+  "date_modified_gmt": "2023-04-12T17:26:36",
+  "type": "variable",
+  "status": "publish",
+  "featured": false,
+  "catalog_visibility": "visible",
+  "description": "",
+  "short_description": "",
+  "sku": "375",
+  "price": "12.92",
+  "regular_price": "",
+  "sale_price": "",
+  "date_on_sale_from": null,
+  "date_on_sale_from_gmt": null,
+  "date_on_sale_to": null,
+  "date_on_sale_to_gmt": null,
+  "on_sale": false,
+  "purchasable": true,
+  "total_sales": 0,
+  "virtual": false,
+  "downloadable": false,
+  "downloads": [],
+  "download_limit": -1,
+  "download_expiry": -1,
+  "external_url": "",
+  "button_text": "",
+  "tax_status": "taxable",
+  "tax_class": "",
+  "manage_stock": false,
+  "stock_quantity": null,
+  "backorders": "no",
+  "backorders_allowed": false,
+  "backordered": false,
+  "low_stock_amount": null,
+  "sold_individually": false,
+  "weight": "0.23",
+  "dimensions": {
+    "length": "0.11",
+    "width": "0.13",
+    "height": "0.2"
+  },
+  "shipping_required": true,
+  "shipping_taxable": true,
+  "shipping_class": "",
+  "shipping_class_id": 0,
+  "reviews_allowed": false,
+  "average_rating": "0.00",
+  "rating_count": 0,
+  "upsell_ids": [],
+  "cross_sell_ids": [],
+  "parent_id": 0,
+  "purchase_note": "",
+  "categories": [
+    {
+      "id": 15,
+      "name": "Uncategorized",
+      "slug": "uncategorized"
+    }
+  ],
+  "tags": [],
+  "images": [
+    {
+      "id": 28698,
+      "date_created": "2023-03-27T11:57:50",
+      "date_created_gmt": "2023-03-27T17:57:50",
+      "date_modified": "2023-03-29T13:15:11",
+      "date_modified_gmt": "2023-03-29T19:15:11",
+      "src": "https:\/\/ninaflorlingerie.com.br\/wp-content\/uploads\/2023\/03\/375_Easy-Resize.com_30_11zon.jpg",
+      "name": "375",
+      "alt": ""
+    },
+    {
+      "id": 28697,
+      "date_created": "2023-03-27T11:57:48",
+      "date_created_gmt": "2023-03-27T17:57:48",
+      "date_modified": "2023-03-29T13:15:30",
+      "date_modified_gmt": "2023-03-29T19:15:30",
+      "src": "https:\/\/ninaflorlingerie.com.br\/wp-content\/uploads\/2023\/03\/375-c_Easy-Resize.com_29_11zon.jpg",
+      "name": "375 COSTAS",
+      "alt": ""
+    }
+  ],
+  "attributes": [
+    {
+      "id": 2,
+      "name": "Cor",
+      "position": 0,
+      "visible": true,
+      "variation": true,
+      "options": [
+        "PRETO",
+        "BRANCO",
+        "RUBI",
+        "SENSUALE"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Tamanho",
+      "position": 1,
+      "visible": true,
+      "variation": true,
+      "options": [
+        "P",
+        "M",
+        "G"
+      ]
+    }
+  ],
+  "default_attributes": [],
+  "variations": [
+    29116,
+    29117,
+    29118,
+    29119,
+    29120,
+    29121,
+    29122,
+    29123,
+    29124,
+    29125,
+    29126,
+    29127,
+    29128,
+    29129,
+    29130,
+    29131,
+    29132,
+    29133
+  ],
+  "grouped_products": [],
+  "menu_order": 0,
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><bdi><span class=\"woocommerce-Price-currencySymbol\">&#82;&#36;<\/span>&nbsp;12,92<\/bdi><\/span>",
+  "related_ids": [
+    28841
+  ],
+  "meta_data": [
+    {
+      "id": 357350,
+      "key": "wwpp_post_meta_enable_quantity_discount_rule",
+      "value": ""
+    },
+    {
+      "id": 357351,
+      "key": "wwpp_product_hash",
+      "value": "6425e0b7d0a366.48901497"
+    },
+    {
+      "id": 357352,
+      "key": "_woosea_exclude_product",
+      "value": "no"
+    },
+    {
+      "id": 357353,
+      "key": "_csr_reducer_mode",
+      "value": "default"
+    },
+    {
+      "id": 357354,
+      "key": "_csr_expire_mode",
+      "value": "default"
+    },
+    {
+      "id": 357355,
+      "key": "csr_expire_time",
+      "value": ""
+    },
+    {
+      "id": 357432,
+      "key": "wwpp_ignore_cat_level_wholesale_discount",
+      "value": "no"
+    },
+    {
+      "id": 357433,
+      "key": "wwpp_ignore_role_level_wholesale_discount",
+      "value": "no"
+    },
+    {
+      "id": 357434,
+      "key": "_jet_woo_product_video_type",
+      "value": "youtube"
+    },
+    {
+      "id": 357435,
+      "key": "_jet_woo_product_video_placeholder",
+      "value": ""
+    },
+    {
+      "id": 357436,
+      "key": "_jet_woo_product_vimeo_video_url",
+      "value": ""
+    },
+    {
+      "id": 357437,
+      "key": "_jet_woo_product_youtube_video_url",
+      "value": ""
+    },
+    {
+      "id": 357438,
+      "key": "_jet_woo_product_self_hosted_video",
+      "value": ""
+    },
+    {
+      "id": 357439,
+      "key": "_jet_woo_template",
+      "value": ""
+    },
+    {
+      "id": 357440,
+      "key": "_template_type",
+      "value": "default"
+    },
+    {
+      "id": 357441,
+      "key": "site-sidebar-layout",
+      "value": "default"
+    },
+    {
+      "id": 357442,
+      "key": "site-content-layout",
+      "value": "default"
+    },
+    {
+      "id": 357443,
+      "key": "theme-transparent-header-meta",
+      "value": "default"
+    },
+    {
+      "id": 357444,
+      "key": "stick-header-meta",
+      "value": "default"
+    },
+    {
+      "id": 358407,
+      "key": "wholesale_customer_variable_level_wholesale_minimum_order_quantity",
+      "value": ""
+    },
+    {
+      "id": 358408,
+      "key": "wholesale_customer_variable_level_wholesale_order_quantity_step",
+      "value": ""
+    },
+    {
+      "id": 373086,
+      "key": "wwpp_product_wholesale_visibility_filter",
+      "value": "all"
+    },
+    {
+      "id": 384607,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29116"
+    },
+    {
+      "id": 384608,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29117"
+    },
+    {
+      "id": 384609,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29118"
+    },
+    {
+      "id": 384610,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29119"
+    },
+    {
+      "id": 384611,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29120"
+    },
+    {
+      "id": 384612,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29121"
+    },
+    {
+      "id": 384613,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29122"
+    },
+    {
+      "id": 384614,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29123"
+    },
+    {
+      "id": 384615,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29124"
+    },
+    {
+      "id": 384616,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29125"
+    },
+    {
+      "id": 384617,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29126"
+    },
+    {
+      "id": 384618,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29127"
+    },
+    {
+      "id": 384619,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29128"
+    },
+    {
+      "id": 384620,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29129"
+    },
+    {
+      "id": 384621,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29130"
+    },
+    {
+      "id": 384622,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29131"
+    },
+    {
+      "id": 384623,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29132"
+    },
+    {
+      "id": 384624,
+      "key": "wholesale_customer_variations_with_wholesale_price",
+      "value": "29133"
+    },
+    {
+      "id": 385192,
+      "key": "wholesale_customer_have_wholesale_price",
+      "value": "yes"
+    }
+  ],
+  "stock_status": "instock",
+  "has_options": true,
+  "post_password": "",
+  "_links": {
+    "self": [
+      {
+        "href": "https:\/\/ninaflorlingerie.com.br\/wp-json\/wc\/v3\/products\/29075"
+      }
+    ],
+    "collection": [
+      {
+        "href": "https:\/\/ninaflorlingerie.com.br\/wp-json\/wc\/v3\/products"
+      }
+    ]
+  }
+}

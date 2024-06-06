@@ -1,0 +1,98 @@
+{
+  "id": 30723,
+  "name": "BODY SUNSHINE G2",
+  "slug": "body-sunshine-g2",
+  "permalink": "https:\/\/ninaflorlingerie.com.br\/produto\/body-sunshine-g2\/",
+  "date_created": "2023-11-07T20:08:04",
+  "date_created_gmt": "2023-11-07T23:08:04",
+  "date_modified": "2023-11-07T20:08:04",
+  "date_modified_gmt": "2023-11-07T23:08:04",
+  "type": "simple",
+  "status": "publish",
+  "featured": false,
+  "catalog_visibility": "visible",
+  "description": "<p>BODY SUNSHINE G2 <\/p>\n",
+  "short_description": "<p>BODY SUNSHINE G2<\/p>\n",
+  "sku": "BD20005",
+  "price": "39.0000",
+  "regular_price": "39.0000",
+  "sale_price": "",
+  "date_on_sale_from": null,
+  "date_on_sale_from_gmt": null,
+  "date_on_sale_to": null,
+  "date_on_sale_to_gmt": null,
+  "on_sale": false,
+  "purchasable": true,
+  "total_sales": 0,
+  "virtual": false,
+  "downloadable": false,
+  "downloads": [],
+  "download_limit": -1,
+  "download_expiry": -1,
+  "external_url": "",
+  "button_text": "",
+  "tax_status": "none",
+  "tax_class": "",
+  "manage_stock": true,
+  "stock_quantity": 0,
+  "backorders": "no",
+  "backorders_allowed": false,
+  "backordered": false,
+  "low_stock_amount": null,
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+    "length": "",
+    "width": "",
+    "height": ""
+  },
+  "shipping_required": true,
+  "shipping_taxable": false,
+  "shipping_class": "",
+  "shipping_class_id": 0,
+  "reviews_allowed": false,
+  "average_rating": "0.00",
+  "rating_count": 0,
+  "upsell_ids": [],
+  "cross_sell_ids": [],
+  "parent_id": 0,
+  "purchase_note": "",
+  "categories": [
+    {
+      "id": 568,
+      "name": "VESTIDOS",
+      "slug": "vestidos"
+    }
+  ],
+  "tags": [],
+  "images": [],
+  "attributes": [],
+  "default_attributes": [],
+  "variations": [],
+  "grouped_products": [],
+  "menu_order": 0,
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><bdi><span class=\"woocommerce-Price-currencySymbol\">&#82;&#36;<\/span>&nbsp;39,00<\/bdi><\/span>",
+  "related_ids": [],
+  "meta_data": [
+    {
+      "id": 386817,
+      "key": "wwpp_product_wholesale_visibility_filter",
+      "value": "all"
+    }
+  ],
+  "stock_status": "outofstock",
+  "has_options": false,
+  "post_password": "",
+  "_links": {
+    "self": [
+      {
+        "href": "https:\/\/ninaflorlingerie.com.br\/wp-json\/wc\/v3\/products\/30723"
+      }
+    ],
+    "collection": [
+      {
+        "href": "https:\/\/ninaflorlingerie.com.br\/wp-json\/wc\/v3\/products"
+      }
+    ]
+  }
+}
