@@ -17,115 +17,97 @@ import (
 const MAX_CONCURRENT_JOBS = 1
 
 type ProductAttributes struct {
-	ID        int      `json:"id"`
-	Name      string   `json:"name"`
-	Visible   bool     `json:"visible"`
-	Variation bool     `json:"variation"`
-	Options   []string `json:"options"`
+	ID        int      `firestore:"id,omitempty"`
+	Name      string   `firestore:"name,omitempty"`
+	Visible   bool     `firestore:"visible,omitempty"`
+	Variation bool     `firestore:"variation,omitempty"`
+	Options   []string `firestore:"options,omitempty"`
 }
 
 type Product struct {
-	ID                int    `json:"id"`
-	Name              string `json:"name"`
-	Slug              string `json:"slug"`
-	Permalink         string `json:"permalink"`
-	DateCreated       string `json:"date_created"`
-	DateCreatedGmt    string `json:"date_created_gmt"`
-	DateModified      string `json:"date_modified"`
-	DateModifiedGmt   string `json:"date_modified_gmt"`
-	Type              string `json:"type"`
-	Status            string `json:"status"`
-	Featured          bool   `json:"featured"`
-	CatalogVisibility string `json:"catalog_visibility"`
-	Description       string `json:"description"`
-	ShortDescription  string `json:"short_description"`
-	Sku               string `json:"sku"`
-	Price             string `json:"price"`
-	RegularPrice      string `json:"regular_price"`
-	SalePrice         string `json:"sale_price"`
-	DateOnSaleFrom    any    `json:"date_on_sale_from"`
-	DateOnSaleFromGmt any    `json:"date_on_sale_from_gmt"`
-	DateOnSaleTo      any    `json:"date_on_sale_to"`
-	DateOnSaleToGmt   any    `json:"date_on_sale_to_gmt"`
-	OnSale            bool   `json:"on_sale"`
-	Purchasable       bool   `json:"purchasable"`
-	TotalSales        int    `json:"total_sales"`
-	Virtual           bool   `json:"virtual"`
-	Downloadable      bool   `json:"downloadable"`
-	Downloads         []any  `json:"downloads"`
-	DownloadLimit     int    `json:"download_limit"`
-	DownloadExpiry    int    `json:"download_expiry"`
-	ExternalURL       string `json:"external_url"`
-	ButtonText        string `json:"button_text"`
-	TaxStatus         string `json:"tax_status"`
-	TaxClass          string `json:"tax_class"`
-	ManageStock       bool   `json:"manage_stock"`
-	StockQuantity     int    `json:"stock_quantity"`
-	Backorders        string `json:"backorders"`
-	BackordersAllowed bool   `json:"backorders_allowed"`
-	Backordered       bool   `json:"backordered"`
-	LowStockAmount    any    `json:"low_stock_amount"`
-	SoldIndividually  bool   `json:"sold_individually"`
-	Weight            string `json:"weight"`
+	ID                string `firestore:"id,omitempty"`
+	Name              string `firestore:"name,omitempty"`
+	Slug              string `firestore:"slug,omitempty"`
+	DateCreated       string `firestore:"date_created,omitempty"`
+	DateModified      string `firestore:"date_modified,omitempty"`
+	Type              string `firestore:"type,omitempty"`
+	Status            string `firestore:"status,omitempty"`
+	CatalogVisibility string `firestore:"catalog_visibility,omitempty"`
+	Description       string `firestore:"description,omitempty"`
+	ShortDescription  string `firestore:"short_description,omitempty"`
+	Sku               string `firestore:"sku,omitempty"`
+	Price             string `firestore:"price,omitempty"`
+	RegularPrice      string `firestore:"regular_price,omitempty"`
+	SalePrice         string `firestore:"sale_price,omitempty"`
+	OnSale            bool   `firestore:"on_sale,omitempty"`
+	Purchasable       bool   `firestore:"purchasable,omitempty"`
+	TotalSales        int    `firestore:"total_sales,omitempty"`
+	Virtual           bool   `firestore:"virtual,omitempty"`
+	Downloadable      bool   `firestore:"downloadable,omitempty"`
+	DownloadLimit     int    `firestore:"download_limit,omitempty"`
+	DownloadExpiry    int    `firestore:"download_expiry,omitempty"`
+	ExternalURL       string `firestore:"external_url,omitempty"`
+	ButtonText        string `firestore:"button_text,omitempty"`
+	TaxStatus         string `firestore:"tax_status,omitempty"`
+	TaxClass          string `firestore:"tax_class,omitempty"`
+	ManageStock       bool   `firestore:"manage_stock,omitempty"`
+	StockQuantity     int    `firestore:"stock_quantity,omitempty"`
+	Backorders        string `firestore:"backorders,omitempty"`
+	BackordersAllowed bool   `firestore:"backorders_allowed,omitempty"`
+	Backordered       bool   `firestore:"backordered,omitempty"`
+	SoldIndividually  bool   `firestore:"sold_individually,omitempty"`
+	Weight            string `firestore:"weight,omitempty"`
 	Dimensions        struct {
-		Length string `json:"length"`
-		Width  string `json:"width"`
-		Height string `json:"height"`
-	} `json:"dimensions"`
-	ShippingRequired bool   `json:"shipping_required"`
-	ShippingTaxable  bool   `json:"shipping_taxable"`
-	ShippingClass    string `json:"shipping_class"`
-	ShippingClassID  int    `json:"shipping_class_id"`
-	ReviewsAllowed   bool   `json:"reviews_allowed"`
-	AverageRating    string `json:"average_rating"`
-	RatingCount      int    `json:"rating_count"`
-	UpsellIds        []any  `json:"upsell_ids"`
-	CrossSellIds     []any  `json:"cross_sell_ids"`
-	ParentID         int    `json:"parent_id"`
-	PurchaseNote     string `json:"purchase_note"`
+		Length string `firestore:"length,omitempty"`
+		Width  string `firestore:"width,omitempty"`
+		Height string `firestore:"height,omitempty"`
+	} `firestore:"dimensions,omitempty"`
+	ShippingRequired bool   `firestore:"shipping_required,omitempty"`
+	ShippingTaxable  bool   `firestore:"shipping_taxable,omitempty"`
+	ShippingClass    string `firestore:"shipping_class,omitempty"`
+	ShippingClassID  int    `firestore:"shipping_class_id,omitempty"`
+	ReviewsAllowed   bool   `firestore:"reviews_allowed,omitempty"`
+	AverageRating    string `firestore:"average_rating,omitempty"`
+	RatingCount      int    `firestore:"rating_count,omitempty"`
+	ParentID         int    `firestore:"parent_id,omitempty"`
+	PurchaseNote     string `firestore:"purchase_note,omitempty"`
 	Categories       []struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-		Slug string `json:"slug"`
-	} `json:"categories"`
+		ID   string `firestore:"id,omitempty"`
+		Name string `firestore:"name,omitempty"`
+		Slug string `firestore:"slug,omitempty"`
+	} `firestore:"categories,omitempty"`
 	Tags []struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-		Slug string `json:"slug"`
-	} `json:"tags"`
+		ID   int    `firestore:"id,omitempty"`
+		Name string `firestore:"name,omitempty"`
+		Slug string `firestore:"slug,omitempty"`
+	} `firestore:"tags,omitempty"`
 	Images []struct {
-		ID              int    `json:"id"`
-		DateCreated     string `json:"date_created"`
-		DateCreatedGmt  string `json:"date_created_gmt"`
-		DateModified    string `json:"date_modified"`
-		DateModifiedGmt string `json:"date_modified_gmt"`
-		Src             string `json:"src"`
-		Name            string `json:"name"`
-		Alt             string `json:"alt"`
-	} `json:"images"`
-	Attributes        []ProductAttributes `json:"attributes"`
-	DefaultAttributes []any               `json:"default_attributes"`
-	Variations        []int               `json:"variations"`
-	GroupedProducts   []any               `json:"grouped_products"`
-	MenuOrder         int                 `json:"menu_order"`
-	PriceHTML         string              `json:"price_html"`
-	RelatedIds        []int               `json:"related_ids"`
-	MetaData          []struct {
-		ID    int    `json:"id"`
-		Key   string `json:"key"`
-		Value string `json:"value"`
-	} `json:"meta_data"`
-	StockStatus  string `json:"stock_status"`
-	HasOptions   bool   `json:"has_options"`
-	PostPassword string `json:"post_password"`
+		ID   int    `firestore:"id,omitempty"`
+		Src  string `firestore:"src,omitempty"`
+		Name string `firestore:"name,omitempty"`
+		Alt  string `firestore:"alt,omitempty"`
+	} `firestore:"images,omitempty"`
+	Attributes []ProductAttributes `firestore:"attributes,omitempty"`
+	Variations []int               `firestore:"variations,omitempty"`
+	MenuOrder  int                 `firestore:"menu_order,omitempty"`
+	PriceHTML  string              `firestore:"price_html,omitempty"`
+	RelatedIds []int               `firestore:"related_ids,omitempty"`
+	MetaData   []struct {
+		ID    int    `firestore:"id,omitempty"`
+		Key   string `firestore:"key,omitempty"`
+		Value string `firestore:"value,omitempty"`
+	} `firestore:"meta_data,omitempty"`
+	StockStatus  string `firestore:"stock_status,omitempty"`
+	HasOptions   bool   `firestore:"has_options,omitempty"`
+	PostPassword string `firestore:"post_password,omitempty"`
 	Links        struct {
 		Self []struct {
-			Href string `json:"href"`
-		} `json:"self"`
+			Href string `firestore:"href,omitempty"`
+		} `firestore:"self,omitempty"`
 		Collection []struct {
-			Href string `json:"href"`
-		} `json:"collection"`
-	} `json:"_links"`
+			Href string `firestore:"href,omitempty"`
+		} `firestore:"collection,omitempty"`
+	} `firestore:"_links,omitempty"`
 }
 
 func (p *Product) Convert(productModel *model.Produto, category *Category, imgFront string, imgBack string, logger *zap.Logger) {
@@ -139,42 +121,32 @@ func (p *Product) Convert(productModel *model.Produto, category *Category, imgFr
 	priceTable := myCfg.PriceTable
 
 	categoryItem := []struct {
-		ID   int    "json:\"id\""
-		Name string "json:\"name\""
-		Slug string "json:\"slug\""
+		ID   string `firestore:"id,omitempty"`
+		Name string `firestore:"name,omitempty"`
+		Slug string `firestore:"slug,omitempty"`
 	}{
 		{ID: category.ID, Name: category.Name, Slug: category.Slug},
 	}
 
+	slugDescription := GenerateSlug(productModel.Descricao)
+
 	imageList := []struct {
-		ID              int    `json:"id"`
-		DateCreated     string `json:"date_created"`
-		DateCreatedGmt  string `json:"date_created_gmt"`
-		DateModified    string `json:"date_modified"`
-		DateModifiedGmt string `json:"date_modified_gmt"`
-		Src             string `json:"src"`
-		Name            string `json:"name"`
-		Alt             string `json:"alt"`
+		ID   int    `firestore:"id,omitempty"`
+		Src  string `firestore:"src,omitempty"`
+		Name string `firestore:"name,omitempty"`
+		Alt  string `firestore:"alt,omitempty"`
 	}{
 		{
-			ID:              1,
-			DateCreated:     "",
-			DateCreatedGmt:  "",
-			DateModified:    "",
-			DateModifiedGmt: "",
-			Src:             imgFront,
-			Name:            GenerateSlug(productModel.Descricao) + "front",
-			Alt:             GenerateSlug(productModel.Descricao) + "front",
+			ID:   1,
+			Src:  imgFront,
+			Name: slugDescription + "front",
+			Alt:  slugDescription + "front",
 		},
 		{
-			ID:              2,
-			DateCreated:     "",
-			DateCreatedGmt:  "",
-			DateModified:    "",
-			DateModifiedGmt: "",
-			Src:             imgBack,
-			Name:            GenerateSlug(productModel.Descricao) + "back",
-			Alt:             GenerateSlug(productModel.Descricao) + "back",
+			ID:   2,
+			Src:  imgBack,
+			Name: slugDescription + "back",
+			Alt:  slugDescription + "back",
 		},
 	}
 
@@ -217,8 +189,8 @@ func (p *Product) Convert(productModel *model.Produto, category *Category, imgFr
 		logger.Error("Error:", zap.Error(err))
 	}
 
-	if wId != 0 {
-		p.ID = int(wId)
+	if wId != "" {
+		p.ID = wId
 	}
 
 	p.Name = productModel.Descricao
@@ -285,22 +257,25 @@ func SyncProducts(logger *zap.Logger) {
 		wPrd := &Product{}
 		wGrp, err := database.RetrieveGroup(item.Grupo)
 		if err != nil {
-			logger.Error(fmt.Sprintf("Error: %v\n", err))
+			logger.Error(fmt.Sprintf("Erro: %v\n", err))
 			wGrp = model.Grupo{}
 		}
+
 		wCat := &Category{}
 		wCat.Convert(&wGrp, logger)
 		synchronizeCategory(wCat, &wGrp, logger)
 
 		go func() {
 			defer wg.Done()
-			fmt.Println(item.Referencia, "starting product routine...")
-			frontImage, _ := UploadImageToWordPressMedia(item.ImagemFrente, logger)
-			backImage, _ := UploadImageToWordPressMedia(item.ImagemVerso, logger)
-			wPrd.Convert(&item, wCat, frontImage, backImage, logger)
+			fmt.Println(item.Referencia, "Iniciando sincronização de produtos...")
+			//frontImage, _ := UploadImageToWordPressMedia(item.ImagemFrente, logger)
+			//backImage, _ := UploadImageToWordPressMedia(item.ImagemVerso, logger)
+
+			wPrd.Convert(&item, wCat, "", "", logger)
+
 			synchronizeProduct(wPrd, logger)
 			syncVariations(wPrd.ID, item.Referencia, logger)
-			fmt.Println(item.Referencia, "finished product routine.")
+			fmt.Println(item.Referencia, "finalizada sincronização de produtos.")
 			<-waitChan
 		}()
 	}
@@ -338,62 +313,45 @@ func checkAttributes(logger *zap.Logger) {
 }
 
 func synchronizeCategory(wCat *Category, wGrp *model.Grupo, logger *zap.Logger) {
-	if wCat.ID == 0 {
-		res, err := createCategory(wCat, logger)
+	if wCat.ID == "" {
+		res, err := CreateFireStoreCategory(wCat, logger)
 		if err != nil {
-			logger.Error("Error when creating category:", zap.Error(err))
+			logger.Error("Erro ao registrar categoria/grupo:", zap.Error(err))
 		}
-		catId, ok := res["ID"].(float64)
-		if ok {
-			wCat.ID = int(catId)
-			database.UpdateGroupIntegration(wGrp.Codigo, int64(wCat.ID))
-		} else {
-			catId, ok = res["resource_id"].(float64)
-			if ok {
-				wCat.ID = int(catId)
-				database.UpdateGroupIntegration(wGrp.Codigo, int64(wCat.ID))
-			}
+		if res.ID != "" {
+			wCat.ID = res.ID
+			database.UpdateGroupIntegration(wGrp.Codigo, wCat.ID)
 		}
-
 	}
 }
 
 func synchronizeProduct(wPrd *Product, logger *zap.Logger) {
 	logger.Info(wPrd.Name + " slug: " + wPrd.Slug)
 
-	var res map[string]interface{}
+	var res *FirebaseResult
 	var err error
-	// check if already updated
-	if wPrd.ID != 0 {
-		//just update -- if excluded from site, this product will not be created
-		res, err = updateProduct(wPrd)
+	// verifica se já existe
+	if wPrd.ID != "" {
+		// somente atualiza as informações
+		res, err = UpdateFireStoreProduct(wPrd, logger)
 		if err != nil {
-			logger.Error(fmt.Sprintf("Erro ao atualizar: %v", err), zap.Error(err))
+			logger.Error("Erro ao atualizar:", zap.Error(err))
 		} else {
-			database.UpdateProductIntegration(wPrd.Sku, int64(wPrd.ID))
-			logger.Info(fmt.Sprintf("Produto atualizado: %f - %s", res["id"], res["name"]))
+			database.UpdateProductIntegration(wPrd.Sku, wPrd.ID)
+			logger.Info(fmt.Sprintf("Produto atualizado: %s - %s", res.ID, wPrd.Name))
 		}
 
 	} else {
 		//create
-		res, err = createProduct(wPrd, logger)
-		if err != nil && err.Error() == "product_invalid_sku" {
-			returnedWooId, ok := res["resource_id"].(float64)
-			if ok {
-				database.UpdateProductIntegration(wPrd.Sku, int64(returnedWooId))
-				logger.Info(fmt.Sprintf("Produto registrado para update na próxima execução: %s", wPrd.Sku))
-			} else {
-				logger.Error(fmt.Sprintf("Erro ao registrar ID produto duplicado: %v", err), zap.Error(err))
-			}
-		} else if err != nil && err.Error() != "product_invalid_sku" {
-			logger.Error(fmt.Sprintf("Erro ao criar: %v", err), zap.Error(err))
+		res, err = CreateFireStoreProduct(wPrd, logger)
+		if err != nil {
+			logger.Error(fmt.Sprintf("Erro ao criar produto, id duplicado ou inválido: %v", err), zap.Error(err))
 		} else {
-			logger.Info(fmt.Sprintf("Produto recebido: %8.2f - %s", res["id"].(float64), res["name"]))
-			returnedWooId, ok := res["id"].(float64)
-			if ok {
-				wPrd.ID = int(returnedWooId)
-				database.UpdateProductIntegration(wPrd.Sku, int64(returnedWooId))
-				logger.Info(fmt.Sprintf("Produto criado: %8.2f - %s", res["id"].(float64), res["name"]))
+			logger.Info(fmt.Sprintf("Produto recebido: %s - %s", res.ID, wPrd.Name))
+			if res.ID != "" {
+				wPrd.ID = res.ID
+				database.UpdateProductIntegration(wPrd.Sku, res.ID)
+				logger.Info(fmt.Sprintf("Produto criado: %8.2f - %s", res.ID, wPrd.Name))
 			} else {
 				logger.Info(fmt.Sprintf("Erro ao registrar ID produto: %v", err), zap.Error(err))
 			}
@@ -451,10 +409,10 @@ func addUniqueElement(slice []string, newElement string) []string {
 	return append(slice, newElement)
 }
 
-func syncVariations(productId int, reference string, logger *zap.Logger) {
+func syncVariations(productId string, reference string, logger *zap.Logger) {
 	variationList, err := database.RetrieveVariations(reference)
 	if err != nil {
-		logger.Error("Error recovering products variations from database")
+		logger.Error("Erro ao recuperar variações do produto no banco de dados")
 		return
 	}
 	for _, variation := range variationList {

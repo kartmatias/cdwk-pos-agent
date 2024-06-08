@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2024 Carlos Matias - carlos@codework.com.br
 */
 package cmd
 

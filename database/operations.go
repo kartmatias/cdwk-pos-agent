@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+
 	"github.com/kartmatias/cdwk-pos-agent/cfg"
 	"github.com/kartmatias/cdwk-pos-agent/dao/model"
 	"gorm.io/gorm"
@@ -77,20 +78,20 @@ FROM Produtos p
 	return variation, nil
 }
 
-func CheckProductIntegration(reference string) (int64, error) {
+func CheckProductIntegration(reference string) (string, error) {
 	var prd model.IntegracaoProduto
 	result := Database.Where("Referencia = ?", reference).First(&prd)
 	if result.Error != nil {
-		return 0, result.Error
+		return "", result.Error
 	}
 	return prd.ID, nil
 }
 
-func CheckGroupIntegration(groupCode int64) (int64, error) {
+func CheckGroupIntegration(groupCode int64) (string, error) {
 	var grp model.IntegracaoGrupo
 	result := Database.Where("Codigo = ?", groupCode).First(&grp)
 	if result.Error != nil {
-		return 0, result.Error
+		return "", result.Error
 	}
 	return grp.ID, nil
 }
@@ -113,7 +114,7 @@ func CheckAttributeIntegration(atributo string) (int64, error) {
 	return attr.ID, nil
 }
 
-func UpdateProductIntegration(reference string, id int64) {
+func UpdateProductIntegration(reference string, id string) {
 	var prd model.IntegracaoProduto
 	result := Database.Where("Referencia = ?", reference).First(&prd)
 
@@ -139,7 +140,7 @@ func UpdateProductIntegration(reference string, id int64) {
 	}
 }
 
-func UpdateGroupIntegration(groupCode int64, id int64) {
+func UpdateGroupIntegration(groupCode int64, id string) {
 	var prd model.IntegracaoGrupo
 	result := Database.Where("Codigo = ?", groupCode).First(&prd)
 

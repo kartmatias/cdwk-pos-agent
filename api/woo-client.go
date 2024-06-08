@@ -267,7 +267,7 @@ func getCategory(c *Category) (map[string]interface{}, error) {
 	client.SetBasicAuth(myCfg.ConsumerKey, myCfg.ConsumerSecret)
 
 	// Define the endpoint for the product list request
-	endpoint := myCfg.BaseUrl + UrlGetCategory + strconv.Itoa(c.ID)
+	endpoint := myCfg.BaseUrl + UrlGetCategory + c.ID
 
 	// Make a GET request to retrieve the product list
 	response, err := client.R().
