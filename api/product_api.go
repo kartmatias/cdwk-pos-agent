@@ -17,7 +17,7 @@ import (
 const MAX_CONCURRENT_JOBS = 1
 
 type ProductAttributes struct {
-	ID        int      `firestore:"id,omitempty"`
+	ID        string   `firestore:"id,omitempty"`
 	Name      string   `firestore:"name,omitempty"`
 	Visible   bool     `firestore:"visible,omitempty"`
 	Variation bool     `firestore:"variation,omitempty"`
@@ -245,7 +245,7 @@ func SyncProducts(logger *zap.Logger) {
 		logger.Panic(fmt.Sprintf("Error: %v\n", err))
 	}
 
-	checkAttributes(logger)
+	//checkAttributes(logger)
 
 	var wg sync.WaitGroup
 
@@ -283,30 +283,32 @@ func SyncProducts(logger *zap.Logger) {
 }
 
 func checkAttributes(logger *zap.Logger) {
+
 	aList, _ := GetProductAttributeList()
+
 	sitesAttributes := cfg.ATRIBUTO_COR + ";" + cfg.ATRIBUTO_TAMANHO
 	for _, attribute := range aList {
 		fmt.Printf("Atttribute ID: %v, Name: %s\n", attribute["id"], attribute["name"])
 		if strings.Contains(sitesAttributes, attribute["name"].(string)) {
-			database.SaveAttrIntegration(attribute["name"].(string), int64(attribute["id"].(float64)))
+			database.SaveAttrIntegration(attribute["name"].(string), attribute["id"].(string))
 		}
 	}
 
 	aCor, _ := database.CheckAttributeIntegration(cfg.ATRIBUTO_COR)
 	aTam, _ := database.CheckAttributeIntegration(cfg.ATRIBUTO_TAMANHO)
 
-	if aCor == 0 {
+	if aCor == "" {
 		//create Cor
 		res, err := CreateAttribute(cfg.ATRIBUTO_COR, logger)
 		if err == nil {
-			database.SaveAttrIntegration(res["name"].(string), int64(res["id"].(float64)))
+			database.SaveAttrIntegration(res["name"].(string), res["id"].(string))
 		}
 	}
-	if aTam == 0 {
+	if aTam == "" {
 		//create Tam
 		res, err := CreateAttribute(cfg.ATRIBUTO_TAMANHO, logger)
 		if err == nil {
-			database.SaveAttrIntegration(res["name"].(string), int64(res["id"].(float64)))
+			database.SaveAttrIntegration(res["name"].(string), res["id"].(string))
 		}
 	}
 
@@ -379,14 +381,14 @@ func convertColorSizeToAttributes(reference string, logger *zap.Logger) []Produc
 	}
 
 	var attributeCor = ProductAttributes{
-		ID:        int(corId),
+		ID:        corId,
 		Name:      cfg.ATRIBUTO_COR,
 		Options:   sliceColor,
 		Visible:   true,
 		Variation: true,
 	}
 	var attributeTam = ProductAttributes{
-		ID:        int(tamId),
+		ID:        tamId,
 		Name:      cfg.ATRIBUTO_TAMANHO,
 		Options:   sliceSizes,
 		Visible:   true,
@@ -417,8 +419,8 @@ func syncVariations(productId string, reference string, logger *zap.Logger) {
 	}
 	for _, variation := range variationList {
 		//variation := variation
-		wVar := &ProductVariation{}
-		err = ConvertModelVariation(&variation, wVar, logger)
+		productVariation := &ProductVariation{}
+		err = ConvertModelVariation(&variation, productVariation, productId, logger)
 		if err != nil {
 			logger.Error("Error converting products variations from database to woo model")
 			return
@@ -428,36 +430,25 @@ func syncVariations(productId string, reference string, logger *zap.Logger) {
 		if err != nil {
 			columnId = 1
 		}
-		var res map[string]interface{}
-		if wVar.ID != nil {
-			res, err = updateProductVariation(productId, wVar)
+		var res *FirebaseResult
+		if productVariation.ID != "" {
+			res, err = UpdateFirebaseProductVariation(productVariation, logger)
 			if err != nil {
-				logger.Error("Error updating product variation", zap.Error(err))
+				logger.Error("Erro ao atualizar variação do produto no firebase", zap.Error(err))
 			} else {
-				database.UpdateVariationIntegration(variation.Referencia, variation.Cor, variation.Tamanho, int64(*wVar.ID), int64(columnId))
-				logger.Info(fmt.Sprintf("Product variation updated: %f - %s", res["id"], res["description"]))
+				database.UpdateVariationIntegration(variation.Referencia, variation.Cor, variation.Tamanho, productVariation.ID, int64(columnId))
+				logger.Info(fmt.Sprintf("Variação de produto atualizada: %s - %s", res.ID, productVariation.ProductID))
 			}
 		} else {
-			res, err = createProductVariation(productId, wVar, logger)
+			res, err = CreateFireStoreProductVariation(productVariation, logger)
 			if err != nil {
-				returnedWooId, ok := res["resource_id"].(float64)
-				if ok {
-					database.UpdateVariationIntegration(variation.Referencia, variation.Cor, variation.Tamanho, int64(returnedWooId), int64(columnId))
-					logger.Info(fmt.Sprintf("Product variation registred : %s", variation.Referencia))
+				if res.ID != "" {
+					database.UpdateVariationIntegration(variation.Referencia, variation.Cor, variation.Tamanho, res.ID, int64(columnId))
+					logger.Info(fmt.Sprintf("Variação de produto registrada: %s", variation.Referencia))
 				} else {
-					logger.Error("Error registering product variation", zap.Error(err))
-				}
-			} else {
-				logger.Info(fmt.Sprintf("Product variation received: %s - %s", res["id"], res["sku"]))
-				returnedWooId, ok := res["id"].(float64)
-				if ok {
-					database.UpdateVariationIntegration(variation.Referencia, variation.Cor, variation.Tamanho, int64(returnedWooId), int64(columnId))
-					logger.Info(fmt.Sprintf("Product variation registred : %s", variation.Referencia))
-				} else {
-					logger.Error("Error registering product variation", zap.Error(err))
+					logger.Error("Erro ao registrar variação de produto", zap.Error(err))
 				}
 			}
-
 		}
 	}
 }

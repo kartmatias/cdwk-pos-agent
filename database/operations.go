@@ -19,10 +19,10 @@ func RetrieveAllProducts() ([]model.Produto, error) {
 
 	var productList []model.Produto
 	//result := Database.Find(&productList)
-	//result := Database.Model(&model.Produto{}).Joins("left join Integracao_Produto on Integracao_Produto.Referencia = Produtos.Referencia", Database.Where("Integracao_Produto.id is null or Integracao_Produto.Contador=0")).Scan(&productList)
+	//result := Database.Model(&model.Produto{}).Joins("left join Integracao_Produto on Firebase_Produto.Referencia = Produtos.Referencia", Database.Where("Firebase_Produto.id is null or Firebase_Produto.Contador=0")).Scan(&productList)
 	result := Database.Model(&model.Produto{}).
-		Joins("left join Integracao_Produto on Integracao_Produto.Referencia = Produtos.Referencia").
-		Where("Integracao_Produto.id is null or Integracao_Produto.Contador=0").
+		Joins("left join Firebase_Produto on Firebase_Produto.Referencia = Produtos.Referencia").
+		Where("Firebase_Produto.id is null or Firebase_Produto.Contador=0").
 		Scan(&productList)
 
 	if result.Error != nil {
@@ -96,20 +96,20 @@ func CheckGroupIntegration(groupCode int64) (string, error) {
 	return grp.ID, nil
 }
 
-func CheckVariationIntegration(reference string, colorId int64, sizeName string) (int64, error) {
+func CheckVariationIntegration(reference string, colorId int64, sizeName string) (string, error) {
 	var modelVar model.IntegracaoVariacao
 	result := Database.Where("Referencia = ? AND Cor = ? AND Tam = ?", reference, colorId, sizeName).First(&modelVar)
 	if result.Error != nil {
-		return 0, result.Error
+		return "", result.Error
 	}
 	return modelVar.ID, nil
 }
 
-func CheckAttributeIntegration(atributo string) (int64, error) {
+func CheckAttributeIntegration(atributo string) (string, error) {
 	var attr model.IntegracaoAtributo
 	result := Database.Where("Atributo = ?", atributo).First(&attr)
 	if result.Error != nil {
-		return 0, result.Error
+		return "", result.Error
 	}
 	return attr.ID, nil
 }
@@ -162,7 +162,7 @@ func UpdateGroupIntegration(groupCode int64, id string) {
 	}
 }
 
-func UpdateVariationIntegration(reference string, colorId int64, sizeName string, variationId int64, colunmId int64) {
+func UpdateVariationIntegration(reference string, colorId int64, sizeName string, variationId string, colunmId int64) {
 	var modelVar model.IntegracaoVariacao
 	result := Database.Where("Referencia = ? AND Cor = ? AND Tam = ?", reference, colorId, sizeName).First(&modelVar)
 
@@ -192,7 +192,7 @@ func UpdateVariationIntegration(reference string, colorId int64, sizeName string
 }
 
 // SaveAttrIntegration : saves attributes on local database
-func SaveAttrIntegration(Attribute string, id int64) {
+func SaveAttrIntegration(Attribute string, id string) {
 	var attr model.IntegracaoAtributo
 	result := Database.Where("Atributo = ?", Attribute).First(&attr)
 
@@ -343,7 +343,7 @@ func GeraSalvaComanda(order map[string]interface{}) bool {
 			return err
 		}
 		if err := Database.Model(model.IntegracaoPedido{}).Create(model.IntegracaoPedido{
-			ID:           int64(order["id"].(float64)),
+			ID:           order["id"].(string),
 			Comanda:      seqComanda,
 			AtualizadoEm: Database.NowFunc(),
 		}).Error; err != nil {

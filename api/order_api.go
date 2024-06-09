@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+
 	"github.com/go-resty/resty/v2"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/kartmatias/cdwk-pos-agent/cfg"
@@ -12,129 +13,129 @@ import (
 const UrlGetOrderList = "/wp-json/wc/v3/orders"
 
 type Order struct {
-	ID               int    `json:"id"`
-	ParentID         int    `json:"parent_id"`
-	Status           string `json:"status"`
-	Currency         string `json:"currency"`
-	Version          string `json:"version"`
-	PricesIncludeTax bool   `json:"prices_include_tax"`
-	DateCreated      string `json:"date_created"`
-	DateModified     string `json:"date_modified"`
-	DiscountTotal    string `json:"discount_total"`
-	DiscountTax      string `json:"discount_tax"`
-	ShippingTotal    string `json:"shipping_total"`
-	ShippingTax      string `json:"shipping_tax"`
-	CartTax          string `json:"cart_tax"`
-	Total            string `json:"total"`
-	TotalTax         string `json:"total_tax"`
-	CustomerID       int    `json:"customer_id"`
-	OrderKey         string `json:"order_key"`
+	ID               int    `firestore:"id"`
+	ParentID         int    `firestore:"parent_id"`
+	Status           string `firestore:"status"`
+	Currency         string `firestore:"currency"`
+	Version          string `firestore:"version"`
+	PricesIncludeTax bool   `firestore:"prices_include_tax"`
+	DateCreated      string `firestore:"date_created"`
+	DateModified     string `firestore:"date_modified"`
+	DiscountTotal    string `firestore:"discount_total"`
+	DiscountTax      string `firestore:"discount_tax"`
+	ShippingTotal    string `firestore:"shipping_total"`
+	ShippingTax      string `firestore:"shipping_tax"`
+	CartTax          string `firestore:"cart_tax"`
+	Total            string `firestore:"total"`
+	TotalTax         string `firestore:"total_tax"`
+	CustomerID       int    `firestore:"customer_id"`
+	OrderKey         string `firestore:"order_key"`
 	Billing          struct {
-		FirstName    string `json:"first_name"`
-		LastName     string `json:"last_name"`
-		Company      string `json:"company"`
-		Address1     string `json:"address_1"`
-		Address2     string `json:"address_2"`
-		City         string `json:"city"`
-		State        string `json:"state"`
-		Postcode     string `json:"postcode"`
-		Country      string `json:"country"`
-		Email        string `json:"email"`
-		Phone        string `json:"phone"`
-		Number       string `json:"number"`
-		Neighborhood string `json:"neighborhood"`
-		Persontype   string `json:"persontype"`
-		Cpf          string `json:"cpf"`
-		Rg           string `json:"rg"`
-		Cnpj         string `json:"cnpj"`
-		Ie           string `json:"ie"`
-		Birthdate    string `json:"birthdate"`
-		Gender       string `json:"gender"`
-		Cellphone    string `json:"cellphone"`
-	} `json:"billing"`
+		FirstName    string `firestore:"first_name"`
+		LastName     string `firestore:"last_name"`
+		Company      string `firestore:"company"`
+		Address1     string `firestore:"address_1"`
+		Address2     string `firestore:"address_2"`
+		City         string `firestore:"city"`
+		State        string `firestore:"state"`
+		Postcode     string `firestore:"postcode"`
+		Country      string `firestore:"country"`
+		Email        string `firestore:"email"`
+		Phone        string `firestore:"phone"`
+		Number       string `firestore:"number"`
+		Neighborhood string `firestore:"neighborhood"`
+		Persontype   string `firestore:"persontype"`
+		Cpf          string `firestore:"cpf"`
+		Rg           string `firestore:"rg"`
+		Cnpj         string `firestore:"cnpj"`
+		Ie           string `firestore:"ie"`
+		Birthdate    string `firestore:"birthdate"`
+		Gender       string `firestore:"gender"`
+		Cellphone    string `firestore:"cellphone"`
+	} `firestore:"billing"`
 	Shipping struct {
-		FirstName    string `json:"first_name"`
-		LastName     string `json:"last_name"`
-		Company      string `json:"company"`
-		Address1     string `json:"address_1"`
-		Address2     string `json:"address_2"`
-		City         string `json:"city"`
-		State        string `json:"state"`
-		Postcode     string `json:"postcode"`
-		Country      string `json:"country"`
-		Phone        string `json:"phone"`
-		Number       string `json:"number"`
-		Neighborhood string `json:"neighborhood"`
-	} `json:"shipping"`
-	PaymentMethod      string `json:"payment_method"`
-	PaymentMethodTitle string `json:"payment_method_title"`
-	TransactionID      string `json:"transaction_id"`
-	CustomerIPAddress  string `json:"customer_ip_address"`
-	CustomerUserAgent  string `json:"customer_user_agent"`
-	CreatedVia         string `json:"created_via"`
-	CustomerNote       string `json:"customer_note"`
-	DateCompleted      string `json:"date_completed"`
-	DatePaid           string `json:"date_paid"`
-	CartHash           string `json:"cart_hash"`
-	Number             string `json:"number"`
+		FirstName    string `firestore:"first_name"`
+		LastName     string `firestore:"last_name"`
+		Company      string `firestore:"company"`
+		Address1     string `firestore:"address_1"`
+		Address2     string `firestore:"address_2"`
+		City         string `firestore:"city"`
+		State        string `firestore:"state"`
+		Postcode     string `firestore:"postcode"`
+		Country      string `firestore:"country"`
+		Phone        string `firestore:"phone"`
+		Number       string `firestore:"number"`
+		Neighborhood string `firestore:"neighborhood"`
+	} `firestore:"shipping"`
+	PaymentMethod      string `firestore:"payment_method"`
+	PaymentMethodTitle string `firestore:"payment_method_title"`
+	TransactionID      string `firestore:"transaction_id"`
+	CustomerIPAddress  string `firestore:"customer_ip_address"`
+	CustomerUserAgent  string `firestore:"customer_user_agent"`
+	CreatedVia         string `firestore:"created_via"`
+	CustomerNote       string `firestore:"customer_note"`
+	DateCompleted      string `firestore:"date_completed"`
+	DatePaid           string `firestore:"date_paid"`
+	CartHash           string `firestore:"cart_hash"`
+	Number             string `firestore:"number"`
 	MetaData           []struct {
-		ID    int    `json:"id"`
-		Key   string `json:"key"`
-		Value string `json:"value"`
-	} `json:"meta_data"`
+		ID    int    `firestore:"id"`
+		Key   string `firestore:"key"`
+		Value string `firestore:"value"`
+	} `firestore:"meta_data"`
 	LineItems []struct {
-		ID          int    `json:"id"`
-		Name        string `json:"name"`
-		ProductID   int    `json:"product_id"`
-		VariationID int    `json:"variation_id"`
-		Quantity    int    `json:"quantity"`
-		TaxClass    string `json:"tax_class"`
-		Subtotal    string `json:"subtotal"`
-		SubtotalTax string `json:"subtotal_tax"`
-		Total       string `json:"total"`
-		TotalTax    string `json:"total_tax"`
-		Taxes       []any  `json:"taxes"`
+		ID          int    `firestore:"id"`
+		Name        string `firestore:"name"`
+		ProductID   int    `firestore:"product_id"`
+		VariationID int    `firestore:"variation_id"`
+		Quantity    int    `firestore:"quantity"`
+		TaxClass    string `firestore:"tax_class"`
+		Subtotal    string `firestore:"subtotal"`
+		SubtotalTax string `firestore:"subtotal_tax"`
+		Total       string `firestore:"total"`
+		TotalTax    string `firestore:"total_tax"`
+		Taxes       []any  `firestore:"taxes"`
 		MetaData    []struct {
-			ID           int    `json:"id"`
-			Key          string `json:"key"`
-			Value        string `json:"value"`
-			DisplayKey   string `json:"display_key"`
-			DisplayValue string `json:"display_value"`
-		} `json:"meta_data"`
-		Sku   string  `json:"sku"`
-		Price float64 `json:"price"`
+			ID           int    `firestore:"id"`
+			Key          string `firestore:"key"`
+			Value        string `firestore:"value"`
+			DisplayKey   string `firestore:"display_key"`
+			DisplayValue string `firestore:"display_value"`
+		} `firestore:"meta_data"`
+		Sku   string  `firestore:"sku"`
+		Price float64 `firestore:"price"`
 		Image struct {
-			ID  int    `json:"id"`
-			Src string `json:"src"`
-		} `json:"image"`
-		ParentName string `json:"parent_name"`
-	} `json:"line_items"`
-	TaxLines             []any  `json:"tax_lines"`
-	ShippingLines        []any  `json:"shipping_lines"`
-	FeeLines             []any  `json:"fee_lines"`
-	CouponLines          []any  `json:"coupon_lines"`
-	Refunds              []any  `json:"refunds"`
-	PaymentURL           string `json:"payment_url"`
-	IsEditable           bool   `json:"is_editable"`
-	NeedsPayment         bool   `json:"needs_payment"`
-	NeedsProcessing      bool   `json:"needs_processing"`
-	DateCreatedGmt       string `json:"date_created_gmt"`
-	DateModifiedGmt      string `json:"date_modified_gmt"`
-	DateCompletedGmt     string `json:"date_completed_gmt"`
-	DatePaidGmt          string `json:"date_paid_gmt"`
-	CorreiosTrackingCode string `json:"correios_tracking_code"`
-	CurrencySymbol       string `json:"currency_symbol"`
+			ID  int    `firestore:"id"`
+			Src string `firestore:"src"`
+		} `firestore:"image"`
+		ParentName string `firestore:"parent_name"`
+	} `firestore:"line_items"`
+	TaxLines             []any  `firestore:"tax_lines"`
+	ShippingLines        []any  `firestore:"shipping_lines"`
+	FeeLines             []any  `firestore:"fee_lines"`
+	CouponLines          []any  `firestore:"coupon_lines"`
+	Refunds              []any  `firestore:"refunds"`
+	PaymentURL           string `firestore:"payment_url"`
+	IsEditable           bool   `firestore:"is_editable"`
+	NeedsPayment         bool   `firestore:"needs_payment"`
+	NeedsProcessing      bool   `firestore:"needs_processing"`
+	DateCreatedGmt       string `firestore:"date_created_gmt"`
+	DateModifiedGmt      string `firestore:"date_modified_gmt"`
+	DateCompletedGmt     string `firestore:"date_completed_gmt"`
+	DatePaidGmt          string `firestore:"date_paid_gmt"`
+	CorreiosTrackingCode string `firestore:"correios_tracking_code"`
+	CurrencySymbol       string `firestore:"currency_symbol"`
 	Links                struct {
 		Self []struct {
-			Href string `json:"href"`
-		} `json:"self"`
+			Href string `firestore:"href"`
+		} `firestore:"self"`
 		Collection []struct {
-			Href string `json:"href"`
-		} `json:"collection"`
+			Href string `firestore:"href"`
+		} `firestore:"collection"`
 		Customer []struct {
-			Href string `json:"href"`
-		} `json:"customer"`
-	} `json:"_links"`
+			Href string `firestore:"href"`
+		} `firestore:"customer"`
+	} `firestore:"_links"`
 }
 
 func getOrderList() ([]map[string]interface{}, error) {

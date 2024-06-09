@@ -17,7 +17,7 @@ var syncproductsCmd = &cobra.Command{
 cdwk-pos-agent syncproducts`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api.SyncProducts(rootLogger)
-		api.SyncOrders(rootLogger)
+		//api.SyncOrders(rootLogger)
 	},
 }
 

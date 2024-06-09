@@ -33,7 +33,7 @@ func (*IntegracaoGrupo) TableName() string {
 
 // IntegracaoVariacao com Woo
 type IntegracaoVariacao struct {
-	ID           int64     `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
+	ID           string    `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
 	Referencia   string    `gorm:"column:Referencia" json:"Referencia"`
 	Cor          int64     `gorm:"column:Cor" json:"Cor"`
 	Tam          string    `gorm:"column:Tam" json:"Tam"`

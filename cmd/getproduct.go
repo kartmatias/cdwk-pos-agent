@@ -28,7 +28,7 @@ to quickly create a Cobra application.`,
 
 		database.Open(rootLogger)
 		text, _ := database.RetrieveProduct("AE004")
-		fmt.Printf("Product: %s", text)
+		fmt.Printf("Produto: %s", text)
 	},
 }
 

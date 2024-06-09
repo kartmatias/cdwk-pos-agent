@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	CATEGORY_COLLECTION = "category"
-	PRODUCT_COLLECTION  = "product"
+	CATEGORY_COLLECTION          = "category"
+	PRODUCT_COLLECTION           = "product"
+	PRODUCT_VARIATION_COLLECTION = "product_variation"
 )
 
 type FirebaseResult struct {
@@ -143,6 +144,86 @@ func CreateFireStoreProduct(p *Product, logger *zap.Logger) (*FirebaseResult, er
 
 	fr := FirebaseResult{
 		ID: ref.ID,
+	}
+
+	return &fr, nil
+}
+
+func UpdateFirebaseProductVariation(p *ProductVariation, logger *zap.Logger) (*FirebaseResult, error) {
+	ctx := context.Background()
+
+	client, err := initFirebase(logger)
+	if err != nil {
+		return nil, err
+	}
+	defer client.Close()
+
+	ref, err := client.Collection(PRODUCT_VARIATION_COLLECTION).Doc(p.ID).Create(ctx, p)
+
+	if err != nil {
+		logger.Error("Erro ao atualizar variação do produto no firestore:", zap.Error(err))
+		return nil, err
+	}
+
+	fmt.Println(ref.UpdateTime)
+	logger.Info("Create time:", zap.String("Time", ref.UpdateTime.String()))
+
+	fr := FirebaseResult{
+		ID: p.ID,
+	}
+
+	return &fr, nil
+}
+
+func CreateFireStoreProductVariation(p *ProductVariation, logger *zap.Logger) (*FirebaseResult, error) {
+	ctx := context.Background()
+
+	client, err := initFirebase(logger)
+	if err != nil {
+		return nil, err
+	}
+	defer client.Close()
+
+	ref := client.Collection(PRODUCT_VARIATION_COLLECTION).NewDoc()
+
+	wr, err := ref.Set(ctx, p)
+
+	if err != nil {
+		logger.Error("Erro ao criar variação de produto no firestore:", zap.Error(err))
+		return nil, err
+	}
+
+	fmt.Println(wr.UpdateTime)
+	logger.Info("Create time:", zap.String("Time", wr.UpdateTime.String()))
+
+	fr := FirebaseResult{
+		ID: ref.ID,
+	}
+
+	return &fr, nil
+}
+
+func UpdateFirebaseAttributes(p *ProductVariation, logger *zap.Logger) (*FirebaseResult, error) {
+	ctx := context.Background()
+
+	client, err := initFirebase(logger)
+	if err != nil {
+		return nil, err
+	}
+	defer client.Close()
+
+	ref, err := client.Collection(PRODUCT_VARIATION_COLLECTION).Doc(p.ID).Create(ctx, p)
+
+	if err != nil {
+		logger.Error("Erro ao atualizar variação do produto no firestore:", zap.Error(err))
+		return nil, err
+	}
+
+	fmt.Println(ref.UpdateTime)
+	logger.Info("Create time:", zap.String("Time", ref.UpdateTime.String()))
+
+	fr := FirebaseResult{
+		ID: p.ID,
 	}
 
 	return &fr, nil
