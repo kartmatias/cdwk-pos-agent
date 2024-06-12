@@ -228,7 +228,7 @@ func updateProduct(p *Product) (map[string]interface{}, error) {
 	client.SetBasicAuth(myCfg.ConsumerKey, myCfg.ConsumerSecret)
 
 	// Define the endpoint for the product list request
-	productListEndpoint := myCfg.BaseUrl + UrlPutProduct + strconv.Itoa(p.ID)
+	productListEndpoint := myCfg.BaseUrl + UrlPutProduct + p.ID
 
 	// Make a GET request to retrieve the product list
 	response, err := client.R().
@@ -267,7 +267,7 @@ func getCategory(c *Category) (map[string]interface{}, error) {
 	client.SetBasicAuth(myCfg.ConsumerKey, myCfg.ConsumerSecret)
 
 	// Define the endpoint for the product list request
-	endpoint := myCfg.BaseUrl + UrlGetCategory + strconv.Itoa(c.ID)
+	endpoint := myCfg.BaseUrl + UrlGetCategory + c.ID
 
 	// Make a GET request to retrieve the product list
 	response, err := client.R().
@@ -378,7 +378,7 @@ func updateProductVariation(productId int, p *ProductVariation) (map[string]inte
 	client.SetBasicAuth(myCfg.ConsumerKey, myCfg.ConsumerSecret)
 	// Define the endpoint for the product list request
 
-	urlEndPoint := myCfg.BaseUrl + fmt.Sprintf(UrlPutProductVariation, strconv.Itoa(productId), strconv.Itoa(*p.ID))
+	urlEndPoint := myCfg.BaseUrl + fmt.Sprintf(UrlPutProductVariation, strconv.Itoa(productId), p.ID)
 
 	// Make a GET request to retrieve the product list
 	response, err := client.R().

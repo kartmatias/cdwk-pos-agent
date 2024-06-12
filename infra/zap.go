@@ -7,8 +7,10 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+const ZAPLOGDIR = "./logs/dbg.log"
+
 func SetupZapLogger() *zap.Logger {
-	var paths = []string{"stdout", "./logs/dbg.log"}
+	var paths = []string{"stdout", ZAPLOGDIR}
 	cfg := zap.NewProductionConfig()
 	cfg.OutputPaths = paths
 	cfg.EncoderConfig.CallerKey = zapcore.OmitKey

@@ -7,9 +7,9 @@ import (
 )
 
 type Category struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	Slug string `json:"slug"`
+	ID   string `firestore:"id"`
+	Name string `firestore:"name"`
+	Slug string `firestore:"slug"`
 }
 
 func (c *Category) Create() {
@@ -28,8 +28,8 @@ func (c *Category) Convert(grupo *model.Grupo, logger *zap.Logger) {
 		logger.Error("Erro:", zap.Error(err))
 	}
 
-	if wId != 0 {
-		c.ID = int(wId)
+	if wId != "" {
+		c.ID = wId
 	}
 	c.Name = grupo.Descricao
 	c.Slug = GenerateSlug(grupo.Descricao)

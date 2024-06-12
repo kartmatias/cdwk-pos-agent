@@ -2,13 +2,14 @@ package model
 
 import "time"
 
-const TableNameIntegracaoProduto = "Integracao_Produto"
-const TableNameIntegracaoGrupo = "Integracao_Grupo"
-const TableNameIntegracaoVariacao = "Integracao_Variacao"
+// Mudando nomes de tabelas para evitar conflito com api woocommerce
+const TableNameIntegracaoProduto = "Firebase_Produto"
+const TableNameIntegracaoGrupo = "Firebase_Grupo"
+const TableNameIntegracaoVariacao = "Firebase_Variacao"
 
 // IntegracaoProduto Produtos
 type IntegracaoProduto struct {
-	ID           int64     `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
+	ID           string    `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
 	Referencia   string    `gorm:"column:Referencia" json:"Referencia"`
 	Contador     int64     `gorm:"column:Contador" json:"Contador"`
 	AtualizadoEm time.Time `gorm:"column:AtualizadoEm" json:"AtualizadoEm"`
@@ -21,8 +22,8 @@ func (*IntegracaoProduto) TableName() string {
 
 // IntegracaoGrupo com Woo
 type IntegracaoGrupo struct {
-	ID     int64 `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
-	Codigo int64 `gorm:"column:Codigo" json:"Codigo"`
+	ID     string `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
+	Codigo int64  `gorm:"column:Codigo" json:"Codigo"`
 }
 
 // TableName Controle Grupo
@@ -32,7 +33,7 @@ func (*IntegracaoGrupo) TableName() string {
 
 // IntegracaoVariacao com Woo
 type IntegracaoVariacao struct {
-	ID           int64     `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
+	ID           string    `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
 	Referencia   string    `gorm:"column:Referencia" json:"Referencia"`
 	Cor          int64     `gorm:"column:Cor" json:"Cor"`
 	Tam          string    `gorm:"column:Tam" json:"Tam"`

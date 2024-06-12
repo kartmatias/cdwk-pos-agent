@@ -2,10 +2,10 @@ package model
 
 import "time"
 
-const TableNameIntegracaoPedido = "Integracao_Pedido"
+const TableNameIntegracaoPedido = "Firebase_Pedido"
 
 type IntegracaoPedido struct {
-	ID           int64     `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
+	ID           string    `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
 	Comanda      int64     `gorm:"column:Comanda" json:"Comanda"`
 	AtualizadoEm time.Time `gorm:"column:AtualizadoEm" json:"AtualizadoEm"`
 }

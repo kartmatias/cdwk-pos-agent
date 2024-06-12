@@ -8,23 +8,24 @@ import (
 )
 
 type VariantAttributes struct {
-	ID     int    `json:"id"`
-	Name   string `json:"name"`
-	Option string `json:"option"`
+	ID     string `firestore:"id,omitempty"`
+	Name   string `firestore:"name,omitempty"`
+	Option string `firestore:"option,omitempty"`
 }
 
 type ProductVariation struct {
-	ID            *int                `json:"id,omitempty"`
-	RegularPrice  string              `json:"regular_price"`
-	Status        string              `json:"status"`
-	Virtual       bool                `json:"virtual"`
-	Downloadable  bool                `json:"downloadable"`
-	TaxStatus     string              `json:"tax_status"`
-	TaxClass      string              `json:"tax_class"`
-	ManageStock   bool                `json:"manage_stock"`
-	StockQuantity int                 `json:"stock_quantity"`
-	StockStatus   string              `json:"stock_status"`
-	Attributes    []VariantAttributes `json:"attributes"`
+	ID            string              `firestore:"id,omitempty"`
+	ProductID     string              `firestore:"product_id,omitempty"`
+	RegularPrice  string              `firestore:"regular_price,omitempty"`
+	Status        string              `firestore:"status,omitempty"`
+	Virtual       bool                `firestore:"virtual,omitempty"`
+	Downloadable  bool                `firestore:"downloadable,omitempty"`
+	TaxStatus     string              `firestore:"tax_status,omitempty"`
+	TaxClass      string              `firestore:"tax_class,omitempty"`
+	ManageStock   bool                `firestore:"manage_stock,omitempty"`
+	StockQuantity int                 `firestore:"stock_quantity,omitempty"`
+	StockStatus   string              `firestore:"stock_status,omitempty"`
+	Attributes    []VariantAttributes `firestore:"attributes,omitempty"`
 }
 
 func DefaultAttributes(colorName string, sizeName string) []VariantAttributes {
@@ -33,12 +34,12 @@ func DefaultAttributes(colorName string, sizeName string) []VariantAttributes {
 
 	return []VariantAttributes{
 		{
-			ID:     int(corId),
+			ID:     corId,
 			Name:   cfg.ATRIBUTO_COR,
 			Option: colorName,
 		},
 		{
-			ID:     int(tamId),
+			ID:     tamId,
 			Name:   cfg.ATRIBUTO_TAMANHO,
 			Option: sizeName,
 		},
@@ -48,7 +49,7 @@ func DefaultAttributes(colorName string, sizeName string) []VariantAttributes {
 func ConvToPtr[T any](v T) *T {
 	return &v
 }
-func ConvertModelVariation(m *model.QueryVariation, n *ProductVariation, logger *zap.Logger) error {
+func ConvertModelVariation(m *model.QueryVariation, n *ProductVariation, productId string, logger *zap.Logger) error {
 
 	myCfg := cfg.GetInstance()
 
@@ -56,8 +57,8 @@ func ConvertModelVariation(m *model.QueryVariation, n *ProductVariation, logger 
 	if err != nil {
 		logger.Error("Error on checking variations on database", zap.String("Message", err.Error()))
 	}
-	if wId != 0 {
-		n.ID = ConvToPtr(int(wId))
+	if wId != "" {
+		n.ID = wId
 	}
 
 	var strStockStatus string
@@ -69,6 +70,7 @@ func ConvertModelVariation(m *model.QueryVariation, n *ProductVariation, logger 
 
 	aVarAttributes := DefaultAttributes(m.NomeCor, m.Tamanho)
 
+	n.ProductID = productId
 	n.RegularPrice = string(m.Preco)
 	n.Status = "publish"
 	n.Virtual = false
@@ -82,71 +84,41 @@ func ConvertModelVariation(m *model.QueryVariation, n *ProductVariation, logger 
 }
 
 type Variation struct {
-	ID                int    `json:"id"`
-	DateCreated       string `json:"date_created"`
-	DateCreatedGmt    string `json:"date_created_gmt"`
-	DateModified      string `json:"date_modified"`
-	DateModifiedGmt   string `json:"date_modified_gmt"`
-	Description       string `json:"description"`
-	Permalink         string `json:"permalink"`
-	Sku               string `json:"sku"`
-	Price             string `json:"price"`
-	RegularPrice      string `json:"regular_price"`
-	SalePrice         string `json:"sale_price"`
-	DateOnSaleFrom    any    `json:"date_on_sale_from"`
-	DateOnSaleFromGmt any    `json:"date_on_sale_from_gmt"`
-	DateOnSaleTo      any    `json:"date_on_sale_to"`
-	DateOnSaleToGmt   any    `json:"date_on_sale_to_gmt"`
-	OnSale            bool   `json:"on_sale"`
-	Status            string `json:"status"`
-	Purchasable       bool   `json:"purchasable"`
-	Virtual           bool   `json:"virtual"`
-	Downloadable      bool   `json:"downloadable"`
-	Downloads         []any  `json:"downloads"`
-	DownloadLimit     int    `json:"download_limit"`
-	DownloadExpiry    int    `json:"download_expiry"`
-	TaxStatus         string `json:"tax_status"`
-	TaxClass          string `json:"tax_class"`
-	ManageStock       bool   `json:"manage_stock"`
-	StockQuantity     any    `json:"stock_quantity"`
-	StockStatus       string `json:"stock_status"`
-	Backorders        string `json:"backorders"`
-	BackordersAllowed bool   `json:"backorders_allowed"`
-	Backordered       bool   `json:"backordered"`
-	Weight            string `json:"weight"`
+	ID                string `firestore:"id,omitempty"`
+	Description       string `firestore:"description,omitempty"`
+	Sku               string `firestore:"sku,omitempty"`
+	Price             string `firestore:"price,omitempty"`
+	RegularPrice      string `firestore:"regular_price,omitempty"`
+	SalePrice         string `firestore:"sale_price,omitempty"`
+	OnSale            bool   `firestore:"on_sale,omitempty"`
+	Status            string `firestore:"status,omitempty"`
+	Purchasable       bool   `firestore:"purchasable,omitempty"`
+	Virtual           bool   `firestore:"virtual,omitempty"`
+	TaxStatus         string `firestore:"tax_status,omitempty"`
+	TaxClass          string `firestore:"tax_class,omitempty"`
+	ManageStock       bool   `firestore:"manage_stock,omitempty"`
+	StockStatus       string `firestore:"stock_status,omitempty"`
+	Backorders        string `firestore:"backorders,omitempty"`
+	BackordersAllowed bool   `firestore:"backorders_allowed,omitempty"`
+	Backordered       bool   `firestore:"backordered,omitempty"`
+	Weight            string `firestore:"weight,omitempty"`
 	Dimensions        struct {
-		Length string `json:"length"`
-		Width  string `json:"width"`
-		Height string `json:"height"`
-	} `json:"dimensions"`
-	ShippingClass   string `json:"shipping_class"`
-	ShippingClassID int    `json:"shipping_class_id"`
+		Length string `firestore:"length,omitempty"`
+		Width  string `firestore:"width,omitempty"`
+		Height string `firestore:"height,omitempty"`
+	} `firestore:"dimensions,omitempty"`
+	ShippingClass   string `firestore:"shipping_class,omitempty"`
+	ShippingClassID int    `firestore:"shipping_class_id,omitempty"`
 	Image           struct {
-		ID              int    `json:"id"`
-		DateCreated     string `json:"date_created"`
-		DateCreatedGmt  string `json:"date_created_gmt"`
-		DateModified    string `json:"date_modified"`
-		DateModifiedGmt string `json:"date_modified_gmt"`
-		Src             string `json:"src"`
-		Name            string `json:"name"`
-		Alt             string `json:"alt"`
-	} `json:"image"`
+		ID   string `firestore:"id,omitempty"`
+		Src  string `firestore:"src,omitempty"`
+		Name string `firestore:"name,omitempty"`
+		Alt  string `firestore:"alt,omitempty"`
+	} `firestore:"image,omitempty"`
 	Attributes []struct {
-		ID     int    `json:"id"`
-		Name   string `json:"name"`
-		Option string `json:"option"`
-	} `json:"attributes"`
-	MenuOrder int   `json:"menu_order"`
-	MetaData  []any `json:"meta_data"`
-	Links     struct {
-		Self []struct {
-			Href string `json:"href"`
-		} `json:"self"`
-		Collection []struct {
-			Href string `json:"href"`
-		} `json:"collection"`
-		Up []struct {
-			Href string `json:"href"`
-		} `json:"up"`
-	} `json:"_links"`
+		ID     string `firestore:"id,omitempty"`
+		Name   string `firestore:"name,omitempty"`
+		Option string `firestore:"option,omitempty"`
+	} `firestore:"attributes,omitempty"`
+	MenuOrder int `firestore:"menu_order,omitempty"`
 }

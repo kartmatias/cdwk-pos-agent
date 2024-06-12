@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2024 Carlos Matias - carlos@codework.com.br
 */
 package cmd
 
@@ -28,7 +28,7 @@ to quickly create a Cobra application.`,
 
 		database.Open(rootLogger)
 		text, _ := database.RetrieveProduct("AE004")
-		fmt.Printf("Product: %s", text)
+		fmt.Printf("Produto: %s", text)
 	},
 }
 

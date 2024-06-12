@@ -1,9 +1,9 @@
 package model
 
-const TableNameIntegracaoAtributo = "Integracao_Atributo"
+const TableNameIntegracaoAtributo = "Firebase_Atributo"
 
 type IntegracaoAtributo struct {
-	ID       int64  `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
+	ID       string `gorm:"column:Id;primaryKey;autoIncrement:false" json:"ID"`
 	Atributo string `gorm:"column:Atributo" json:"Atributo"`
 }
 
