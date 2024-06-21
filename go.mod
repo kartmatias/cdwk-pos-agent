@@ -3,11 +3,14 @@ module github.com/kartmatias/cdwk-pos-agent
 go 1.20
 
 require (
-	github.com/go-resty/resty/v2 v2.10.0
+	cloud.google.com/go/firestore v1.15.0
+	firebase.google.com/go v3.13.0+incompatible
+	github.com/go-resty/resty/v2 v2.11.0
 	github.com/imroc/req/v3 v3.42.1
 	github.com/jlaffaye/ftp v0.2.0
 	github.com/joho/godotenv v1.5.1
 	go.uber.org/zap v1.26.0
+	google.golang.org/api v0.183.0
 	gorm.io/gen v0.3.23
 	gorm.io/gorm v1.25.2
 	gorm.io/plugin/dbresolver v1.4.7
@@ -18,13 +21,11 @@ require (
 	cloud.google.com/go/auth v0.5.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
-	cloud.google.com/go/firestore v1.15.0 // indirect
 	cloud.google.com/go/iam v1.1.8 // indirect
 	cloud.google.com/go/longrunning v0.5.7 // indirect
 	cloud.google.com/go/storage v1.41.0 // indirect
-	firebase.google.com/go v3.13.0+incompatible // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
-	github.com/cloudflare/circl v1.3.3 // indirect
+	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/gaukas/godicttls v0.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
@@ -70,7 +71,6 @@ require (
 	golang.org/x/text v0.15.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.12.1-0.20230815132531-74c255bcf846 // indirect
-	google.golang.org/api v0.183.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto v0.0.0-20240528184218-531527333157 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240521202816-d264139d666e // indirect

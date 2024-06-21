@@ -26,6 +26,7 @@ type ProductAttributes struct {
 
 type Product struct {
 	ID                string `firestore:"id,omitempty"`
+	TenantId          string `firestore:"tenant_id,omitempty"`
 	Name              string `firestore:"name,omitempty"`
 	Slug              string `firestore:"slug,omitempty"`
 	DateCreated       string `firestore:"date_created,omitempty"`
@@ -43,9 +44,6 @@ type Product struct {
 	Purchasable       bool   `firestore:"purchasable,omitempty"`
 	TotalSales        int    `firestore:"total_sales,omitempty"`
 	Virtual           bool   `firestore:"virtual,omitempty"`
-	Downloadable      bool   `firestore:"downloadable,omitempty"`
-	DownloadLimit     int    `firestore:"download_limit,omitempty"`
-	DownloadExpiry    int    `firestore:"download_expiry,omitempty"`
 	ExternalURL       string `firestore:"external_url,omitempty"`
 	ButtonText        string `firestore:"button_text,omitempty"`
 	TaxStatus         string `firestore:"tax_status,omitempty"`
@@ -88,29 +86,19 @@ type Product struct {
 		Alt  string `firestore:"alt,omitempty"`
 	} `firestore:"images,omitempty"`
 	Attributes []ProductAttributes `firestore:"attributes,omitempty"`
-	Variations []int               `firestore:"variations,omitempty"`
 	MenuOrder  int                 `firestore:"menu_order,omitempty"`
 	PriceHTML  string              `firestore:"price_html,omitempty"`
-	RelatedIds []int               `firestore:"related_ids,omitempty"`
 	MetaData   []struct {
 		ID    int    `firestore:"id,omitempty"`
 		Key   string `firestore:"key,omitempty"`
 		Value string `firestore:"value,omitempty"`
 	} `firestore:"meta_data,omitempty"`
-	StockStatus  string `firestore:"stock_status,omitempty"`
-	HasOptions   bool   `firestore:"has_options,omitempty"`
-	PostPassword string `firestore:"post_password,omitempty"`
-	Links        struct {
-		Self []struct {
-			Href string `firestore:"href,omitempty"`
-		} `firestore:"self,omitempty"`
-		Collection []struct {
-			Href string `firestore:"href,omitempty"`
-		} `firestore:"collection,omitempty"`
-	} `firestore:"_links,omitempty"`
+	StockStatus  string             `firestore:"stock_status,omitempty"`
+	PostPassword string             `firestore:"post_password,omitempty"`
+	Variations   []ProductVariation `firestore:"variations,omitempty"`
 }
 
-func (p *Product) Convert(productModel *model.Produto, category *Category, imgFront string, imgBack string, logger *zap.Logger) {
+func (p *Product) Convert(productModel *model.Produto, category *Category, imgFront string, imgBack string, cnpj string, logger *zap.Logger) {
 
 	var strStockStatus string
 	var priceSelected string
@@ -193,9 +181,10 @@ func (p *Product) Convert(productModel *model.Produto, category *Category, imgFr
 		p.ID = wId
 	}
 
+	p.TenantId = cnpj
 	p.Name = productModel.Descricao
 	p.Slug = GenerateSlug(productModel.Descricao)
-	p.Description = productModel.Descricao + " <p>" + productModel.Detalhes + "</p>"
+	p.Description = productModel.Descricao + cfg.ConditionalString(productModel.Detalhes == "", "", " <p>"+productModel.Detalhes+"</p>")
 	p.ShortDescription = productModel.Descricao
 	p.Sku = productModel.Referencia
 	p.Type = "variable"
@@ -204,7 +193,6 @@ func (p *Product) Convert(productModel *model.Produto, category *Category, imgFr
 	p.SalePrice = priceSelected
 	p.OnSale = true
 	p.Purchasable = true
-	p.Downloadable = false
 	p.TaxStatus = "taxable"
 	p.ManageStock = manageStock
 	p.StockQuantity = int(qtdStock)
@@ -212,7 +200,6 @@ func (p *Product) Convert(productModel *model.Produto, category *Category, imgFr
 	p.Backorders = backOrders
 	p.Categories = categoryItem
 	p.CatalogVisibility = "visible"
-	p.HasOptions = true
 	p.Attributes = convertColorSizeToAttributes(productModel.Referencia, logger)
 	if len(imgFront) > 0 && len(imgBack) > 0 {
 		p.Images = imageList
@@ -240,7 +227,17 @@ func SyncProducts(logger *zap.Logger) {
 
 	database.Open(logger)
 	productList, err := database.RetrieveAllProducts()
+	if err != nil {
+		logger.Panic(fmt.Sprintf("Error: %v\n", err))
+	}
 
+	myCfg := cfg.GetInstance()
+	intLoja, err := strconv.ParseInt(myCfg.CodLoja, 10, 64)
+	if err != nil {
+		logger.Panic(fmt.Sprintf("Error: %v\n", err))
+	}
+
+	cnpj, err := database.GetTenantId(intLoja)
 	if err != nil {
 		logger.Panic(fmt.Sprintf("Error: %v\n", err))
 	}
@@ -268,13 +265,15 @@ func SyncProducts(logger *zap.Logger) {
 		go func() {
 			defer wg.Done()
 			fmt.Println(item.Referencia, "Iniciando sincronização de produtos...")
+
 			//frontImage, _ := UploadImageToWordPressMedia(item.ImagemFrente, logger)
 			//backImage, _ := UploadImageToWordPressMedia(item.ImagemVerso, logger)
 
-			wPrd.Convert(&item, wCat, "", "", logger)
+			wPrd.Convert(&item, wCat, "", "", cnpj, logger)
 
-			synchronizeProduct(wPrd, logger)
-			syncVariations(wPrd.ID, item.Referencia, logger)
+			variations := syncVariations(wPrd.ID, item.Referencia, logger)
+			synchronizeProduct(wPrd, variations, logger)
+
 			fmt.Println(item.Referencia, "finalizada sincronização de produtos.")
 			<-waitChan
 		}()
@@ -327,11 +326,20 @@ func synchronizeCategory(wCat *Category, wGrp *model.Grupo, logger *zap.Logger) 
 	}
 }
 
-func synchronizeProduct(wPrd *Product, logger *zap.Logger) {
+func synchronizeProduct(wPrd *Product, wPrdVar []*ProductVariation, logger *zap.Logger) {
 	logger.Info(wPrd.Name + " slug: " + wPrd.Slug)
 
 	var res *FirebaseResult
 	var err error
+
+	// clone array
+	b := make([]ProductVariation, len(wPrdVar))
+	for i := range wPrdVar {
+		b[i] = *wPrdVar[i]
+	}
+
+	wPrd.Variations = b
+
 	// verifica se já existe
 	if wPrd.ID != "" {
 		// somente atualiza as informações
@@ -353,7 +361,7 @@ func synchronizeProduct(wPrd *Product, logger *zap.Logger) {
 			if res.ID != "" {
 				wPrd.ID = res.ID
 				database.UpdateProductIntegration(wPrd.Sku, res.ID)
-				logger.Info(fmt.Sprintf("Produto criado: %8.2f - %s", res.ID, wPrd.Name))
+				logger.Info(fmt.Sprintf("Produto criado: %s - %s", res.ID, wPrd.Name))
 			} else {
 				logger.Info(fmt.Sprintf("Erro ao registrar ID produto: %v", err), zap.Error(err))
 			}
@@ -411,19 +419,25 @@ func addUniqueElement(slice []string, newElement string) []string {
 	return append(slice, newElement)
 }
 
-func syncVariations(productId string, reference string, logger *zap.Logger) {
+func syncVariations(productId string, reference string, logger *zap.Logger) []*ProductVariation {
+
+	var pvarResult []*ProductVariation
+
 	variationList, err := database.RetrieveVariations(reference)
 	if err != nil {
 		logger.Error("Erro ao recuperar variações do produto no banco de dados")
-		return
+		return nil
 	}
-	for _, variation := range variationList {
+
+	pvarResult = make([]*ProductVariation, len(variationList))
+
+	for idx, variation := range variationList {
 		//variation := variation
 		productVariation := &ProductVariation{}
 		err = ConvertModelVariation(&variation, productVariation, productId, logger)
 		if err != nil {
 			logger.Error("Error converting products variations from database to woo model")
-			return
+			return nil
 		}
 
 		columnId, err := strconv.Atoi(variation.Coluna)
@@ -450,5 +464,9 @@ func syncVariations(productId string, reference string, logger *zap.Logger) {
 				}
 			}
 		}
+
+		pvarResult[idx] = productVariation
+
 	}
+	return pvarResult
 }

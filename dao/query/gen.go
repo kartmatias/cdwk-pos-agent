@@ -17,23 +17,23 @@ import (
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:      db,
-		Cliente: newCliente(db, opts...),
+		db:   db,
+		Loja: newLoja(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Cliente cliente
+	Loja loja
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:      db,
-		Cliente: q.Cliente.clone(db),
+		db:   db,
+		Loja: q.Loja.clone(db),
 	}
 }
 
@@ -47,18 +47,18 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:      db,
-		Cliente: q.Cliente.replaceDB(db),
+		db:   db,
+		Loja: q.Loja.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Cliente *clienteDo
+	Loja *lojaDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Cliente: q.Cliente.WithContext(ctx),
+		Loja: q.Loja.WithContext(ctx),
 	}
 }
 
