@@ -450,3 +450,12 @@ func GetReferenceByID(id int64) (string, error) {
 	}
 	return prd.Referencia, nil
 }
+
+func GetTenantId(codigoLoja int64) (string, error) {
+	var loja model.Loja
+	result := Database.Where("Codigo = ?", codigoLoja).First(&loja)
+	if result.Error != nil {
+		return "", result.Error
+	}
+	return loja.CNPJ, nil
+}

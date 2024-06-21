@@ -21,6 +21,8 @@ type FirebaseResult struct {
 	ID string
 }
 
+var globalClient *firestore.Client
+
 func initFirebase(logger *zap.Logger) (*firestore.Client, error) {
 	opt := option.WithCredentialsFile(os.Getenv("FIREBASE_KEYFILE"))
 	config := &firebase.Config{
@@ -43,39 +45,20 @@ func initFirebase(logger *zap.Logger) (*firestore.Client, error) {
 	return client, nil
 }
 
-func CreateProduct(logger *zap.Logger) error {
-	ctx := context.Background()
-
-	client, err := initFirebase(logger)
-
-	if err != nil {
-		return err
-	}
-
-	wr, err := client.Doc("products").Create(ctx, map[string]interface{}{
-		"referencia": "REF",
-		"descricao":  "DESCRICAO",
-	})
-	if err != nil {
-		logger.Error("firestore Doc Create error:", zap.Error(err))
-		return err
-	}
-	fmt.Println(wr.UpdateTime)
-	logger.Info("Create time:", zap.String("Time", wr.UpdateTime.String()))
-
-	return nil
-}
-
 func CreateFireStoreCategory(c *Category, logger *zap.Logger) (*FirebaseResult, error) {
 	ctx := context.Background()
 
-	client, err := initFirebase(logger)
+	var err error
+	if globalClient == nil {
+		globalClient, err = initFirebase(logger)
+	}
+	//client, err := initFirebase(logger)
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
+	//defer client.Close()
 
-	ref := client.Collection(CATEGORY_COLLECTION).NewDoc()
+	ref := globalClient.Collection(CATEGORY_COLLECTION).NewDoc()
 
 	wr, err := ref.Set(ctx, c)
 
@@ -98,13 +81,17 @@ func CreateFireStoreCategory(c *Category, logger *zap.Logger) (*FirebaseResult, 
 func UpdateFireStoreProduct(p *Product, logger *zap.Logger) (*FirebaseResult, error) {
 	ctx := context.Background()
 
-	client, err := initFirebase(logger)
+	var err error
+	if globalClient == nil {
+		globalClient, err = initFirebase(logger)
+	}
+	//client, err := initFirebase(logger)
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
+	//defer client.Close()
 
-	ref, err := client.Collection(PRODUCT_COLLECTION).Doc(p.ID).Create(ctx, p)
+	ref, err := globalClient.Collection(PRODUCT_COLLECTION).Doc(p.ID).Create(ctx, p)
 
 	if err != nil {
 		logger.Error("Erro ao atualizar produto no firestore:", zap.Error(err))
@@ -124,13 +111,17 @@ func UpdateFireStoreProduct(p *Product, logger *zap.Logger) (*FirebaseResult, er
 func CreateFireStoreProduct(p *Product, logger *zap.Logger) (*FirebaseResult, error) {
 	ctx := context.Background()
 
-	client, err := initFirebase(logger)
+	var err error
+	if globalClient == nil {
+		globalClient, err = initFirebase(logger)
+	}
+	//client, err := initFirebase(logger)
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
+	//defer client.Close()
 
-	ref := client.Collection(PRODUCT_COLLECTION).NewDoc()
+	ref := globalClient.Collection(PRODUCT_COLLECTION).NewDoc()
 
 	wr, err := ref.Set(ctx, p)
 
@@ -152,13 +143,17 @@ func CreateFireStoreProduct(p *Product, logger *zap.Logger) (*FirebaseResult, er
 func UpdateFirebaseProductVariation(p *ProductVariation, logger *zap.Logger) (*FirebaseResult, error) {
 	ctx := context.Background()
 
-	client, err := initFirebase(logger)
+	var err error
+	if globalClient == nil {
+		globalClient, err = initFirebase(logger)
+	}
+	//client, err := initFirebase(logger)
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
+	//defer client.Close()
 
-	ref, err := client.Collection(PRODUCT_VARIATION_COLLECTION).Doc(p.ID).Create(ctx, p)
+	ref, err := globalClient.Collection(PRODUCT_VARIATION_COLLECTION).Doc(p.ID).Create(ctx, p)
 
 	if err != nil {
 		logger.Error("Erro ao atualizar variação do produto no firestore:", zap.Error(err))
@@ -178,13 +173,17 @@ func UpdateFirebaseProductVariation(p *ProductVariation, logger *zap.Logger) (*F
 func CreateFireStoreProductVariation(p *ProductVariation, logger *zap.Logger) (*FirebaseResult, error) {
 	ctx := context.Background()
 
-	client, err := initFirebase(logger)
+	var err error
+	if globalClient == nil {
+		globalClient, err = initFirebase(logger)
+	}
+	//client, err := initFirebase(logger)
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
+	//defer client.Close()
 
-	ref := client.Collection(PRODUCT_VARIATION_COLLECTION).NewDoc()
+	ref := globalClient.Collection(PRODUCT_VARIATION_COLLECTION).NewDoc()
 
 	wr, err := ref.Set(ctx, p)
 
@@ -206,13 +205,17 @@ func CreateFireStoreProductVariation(p *ProductVariation, logger *zap.Logger) (*
 func UpdateFirebaseAttributes(p *ProductVariation, logger *zap.Logger) (*FirebaseResult, error) {
 	ctx := context.Background()
 
-	client, err := initFirebase(logger)
+	var err error
+	if globalClient == nil {
+		globalClient, err = initFirebase(logger)
+	}
+	//client, err := initFirebase(logger)
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
+	//defer client.Close()
 
-	ref, err := client.Collection(PRODUCT_VARIATION_COLLECTION).Doc(p.ID).Create(ctx, p)
+	ref, err := globalClient.Collection(PRODUCT_VARIATION_COLLECTION).Doc(p.ID).Create(ctx, p)
 
 	if err != nil {
 		logger.Error("Erro ao atualizar variação do produto no firestore:", zap.Error(err))
