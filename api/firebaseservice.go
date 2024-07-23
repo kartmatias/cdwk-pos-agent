@@ -8,6 +8,7 @@ import (
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 	"go.uber.org/zap"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
 
@@ -230,4 +231,39 @@ func UpdateFirebaseAttributes(p *ProductVariation, logger *zap.Logger) (*Firebas
 	}
 
 	return &fr, nil
+}
+
+func GetFirebaseProduct(logger *zap.Logger) ([]Product, error) {
+	ctx := context.Background()
+	var err error
+	if globalClient == nil {
+		globalClient, err = initFirebase(logger)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var prods []Product
+	ref := globalClient.Collection(PRODUCT_COLLECTION).Documents(ctx)
+	defer ref.Stop()
+	for {
+		doc, err := ref.Next()
+
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			break
+		}
+		var prod Product
+		if err := doc.DataTo(&prod); err != nil {
+			break
+		}
+		prods = append(prods, prod)
+
+	}
+
+	return prods, nil
+
 }
