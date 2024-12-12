@@ -292,7 +292,7 @@ func checkAttributesCdw(logger *zap.Logger) {
 
 func synchronizeCategoryCdw(wCat *CategoryCdw, wGrp *model.Grupo, logger *zap.Logger) {
 	if wCat.ID == "" {
-		res, err := CreatejsonCategory(wCat, logger)
+		res, err := CreateCategoryCdw(wCat, logger)
 		if err != nil {
 			logger.Error("Erro ao registrar categoria/grupo:", zap.Error(err))
 		}

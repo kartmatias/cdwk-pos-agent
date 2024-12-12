@@ -11,6 +11,7 @@ import (
 )
 
 const CDW_PRODUCT_URL = "/product"
+const CDW_CATEGORY_URL = "/category"
 
 func GetProductsCdw(logger *zap.Logger) {
 	myCfg := cfg.GetInstance()
@@ -157,6 +158,76 @@ func createProductCdw(p *Product, logger *zap.Logger) (map[string]interface{}, e
 				return nil, err
 			}
 			err = fmt.Errorf("failed to create the product. Status code: %d", response.StatusCode())
+			logger.Error(err.Error(), zap.Any("Body", resultMap))
+			return nil, err
+		}
+	}
+
+}
+
+func createCategoryCdw(c *CategoryCdw, logger *zap.Logger) (map[string]interface{}, error) {
+
+	myCfg := cfg.GetInstance()
+
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
+
+	// Create a Resty client
+	client := resty.New().
+		SetJSONMarshaler(json.Marshal).
+		SetJSONUnmarshaler(json.Unmarshal)
+
+	// Set basic authentication credentials
+	client.SetBasicAuth(myCfg.ConsumerKey, myCfg.ConsumerSecret)
+
+	// Define the endpoint for the product list request
+	apiEndPoint := myCfg.BaseUrl + CDW_CATEGORY_URL
+
+	// Make a GET request to retrieve the product list
+	response, err := client.R().
+		SetBody(c).
+		Post(apiEndPoint)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check for a successful response
+
+	switch response.StatusCode() {
+	case 201:
+		{
+			// Parse the response to get the category list
+			var category map[string]interface{}
+			err := json.Unmarshal(response.Body(), &category)
+			if err != nil {
+				return nil, err
+			}
+			return category, nil
+		}
+	case 400:
+		{
+			var resultMap map[string]interface{}
+			err := json.Unmarshal(response.Body(), &resultMap)
+			if err != nil {
+				return nil, err
+			}
+			if resultMap["code"].(string) == "term_exists" {
+				var tmpId map[string]interface{}
+				tmpId = resultMap["data"].(map[string]interface{})
+				return tmpId, nil
+			}
+			err = fmt.Errorf("failed to create the product category. Status code: %d", response.StatusCode())
+			logger.Error(err.Error(), zap.Any("Body", resultMap))
+			return nil, err
+		}
+	default:
+		{
+			var resultMap map[string]interface{}
+			err := json.Unmarshal(response.Body(), &resultMap)
+			if err != nil {
+				return nil, err
+			}
+			err = fmt.Errorf("failed to create the product category. Status code: %d", response.StatusCode())
 			logger.Error(err.Error(), zap.Any("Body", resultMap))
 			return nil, err
 		}
